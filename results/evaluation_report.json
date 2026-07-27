@@ -1,0 +1,6 @@
+{
+    "total_requests_processed": 16,
+    "accepted_legit_requests": 10,
+    "rejected_spoofed_requests": 6,
+    "spoofing_detection_accuracy_percent": 100.0
+}

@@ -1,0 +1,16 @@
+[2026-07-26 17:13:41] [ACCEPT] Client: SENSOR_01 | Temp: 25.5 | Note: HMAC Validated Successfully
+[2026-07-26 17:13:46] [ACCEPT] Client: SENSOR_01 | Temp: 26.0 | Note: HMAC Validated Successfully
+[2026-07-26 17:13:51] [ACCEPT] Client: SENSOR_01 | Temp: 27.2 | Note: HMAC Validated Successfully
+[2026-07-26 17:13:56] [ACCEPT] Client: SENSOR_01 | Temp: 28.1 | Note: HMAC Validated Successfully
+[2026-07-26 17:14:01] [ACCEPT] Client: SENSOR_01 | Temp: 25.0 | Note: HMAC Validated Successfully
+[2026-07-26 17:14:10] [REJECT] Client: SENSOR_01 | Temp: 99.0 | Note: Invalid HMAC Signature / Spoofing Detected!
+[2026-07-26 17:14:13] [REJECT] Client: SENSOR_01 | Temp: 99.0 | Note: Invalid HMAC Signature / Spoofing Detected!
+[2026-07-26 17:14:16] [REJECT] Client: SENSOR_01 | Temp: 28.5 | Note: Timestamp Expired (> 5s) / Replay Attack
+[2026-07-27 09:33:04] [ACCEPT] Client: SENSOR_01 | Temp: 25.5 | Note: HMAC Validated Successfully
+[2026-07-27 09:33:09] [ACCEPT] Client: SENSOR_01 | Temp: 26.0 | Note: HMAC Validated Successfully
+[2026-07-27 09:33:14] [ACCEPT] Client: SENSOR_01 | Temp: 27.2 | Note: HMAC Validated Successfully
+[2026-07-27 09:33:19] [ACCEPT] Client: SENSOR_01 | Temp: 28.1 | Note: HMAC Validated Successfully
+[2026-07-27 09:33:24] [ACCEPT] Client: SENSOR_01 | Temp: 25.0 | Note: HMAC Validated Successfully
+[2026-07-27 09:35:38] [REJECT] Client: SENSOR_01 | Temp: 99.0 | Note: Invalid HMAC Signature / Spoofing Detected!
+[2026-07-27 09:35:41] [REJECT] Client: SENSOR_01 | Temp: 99.0 | Note: Invalid HMAC Signature / Spoofing Detected!
+[2026-07-27 09:35:44] [REJECT] Client: SENSOR_01 | Temp: 28.5 | Note: Timestamp Expired (> 5s) / Replay Attack
