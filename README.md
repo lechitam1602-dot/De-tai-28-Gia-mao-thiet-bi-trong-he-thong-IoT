@@ -1,216 +1,293 @@
-**Họ và tên: Lê Chí Tâm**
+<div align="center">
 
-**MSSV: 231A010500**
+### Đề tài 28 - Giả mạo thiết bị trong hệ thống IoT
 
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker\&logoColor=white)
+![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-green)
+![Flask](https://img.shields.io/badge/Flask-Web_App-black?logo=flask)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
+</div>
 
-**ĐỀ TÀI 28 – GIẢ MẠO THIẾT BỊ TRONG HỆ THỐNG IOT**
+---
 
+# 📖 Mục lục
 
+* [Giới thiệu](#-giới-thiệu)
+* [Mục tiêu](#-mục-tiêu)
+* [Chức năng](#-chức-năng)
+* [Kiến trúc hệ thống](#-kiến-trúc-hệ-thống)
+* [Công nghệ sử dụng](#-công-nghệ-sử-dụng)
+* [Cấu trúc thư mục](#-cấu-trúc-thư-mục)
+* [Cài đặt](#-cài-đặt)
+* [Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng)
+* [Kịch bản kiểm thử](#-kịch-bản-kiểm-thử)
+* [Kết quả](#-kết-quả)
+* [Hướng phát triển](#-hướng-phát-triển)
+* [Tài liệu tham khảo](#-tài-liệu-tham-khảo)
+* [Tác giả](#-tác-giả)
 
-**# Mục tiêu của đề tài là:**
+---
 
-&#x09;- Mô phỏng hệ thống IoT bằng Python.
+# 📖 Giới thiệu
 
-&#x09;- Thực hiện kịch bản giả mạo thiết bị.
+Internet of Things (IoT) đang được ứng dụng rộng rãi trong nhiều lĩnh vực như nhà thông minh, công nghiệp, y tế và giao thông. Tuy nhiên, cùng với sự phát triển đó là nhiều nguy cơ mất an toàn thông tin, trong đó **Device Spoofing (Giả mạo thiết bị)** là một hình thức tấn công phổ biến.
 
-&#x09;- Phát hiện và từ chối các request giả mạo.
+Dự án xây dựng một môi trường Lab mô phỏng hệ thống IoT sử dụng giao thức MQTT, triển khai thiết bị hợp lệ và thiết bị giả mạo, đồng thời áp dụng cơ chế xác thực **HMAC-SHA256 kết hợp Timestamp** để phát hiện và ngăn chặn các cuộc tấn công giả mạo thiết bị.
 
-&#x09;- Lưu log và thống kê kết quả thử nghiệm.
+---
 
-&#x09;- Đánh giá hiệu quả giải pháp bảo mật.
+# 🎯 Mục tiêu
 
+* Nghiên cứu kiến trúc hệ thống IoT.
+* Tìm hiểu giao thức MQTT.
+* Phân tích tấn công Device Spoofing.
+* Xây dựng môi trường Lab mô phỏng.
+* Triển khai MQTT Broker bằng Docker.
+* Mô phỏng thiết bị IoT hợp lệ.
+* Mô phỏng thiết bị giả mạo.
+* Triển khai xác thực HMAC-SHA256.
+* Chống Replay Attack bằng Timestamp.
+* Ghi nhận Audit Log.
+* Xây dựng Dashboard giám sát.
+* Đánh giá hiệu quả giải pháp.
 
+---
 
-**# Mô tả hệ thống:**
+# ✨ Chức năng
 
-&#x09;				IoT Sensor
+## Thiết bị hợp lệ
 
-&#x09;				   |
+* Gửi dữ liệu cảm biến.
+* Sinh chữ ký HMAC.
+* Gửi Timestamp.
+* Publish dữ liệu lên MQTT Broker.
 
-&#x20;                                          |
+### Thiết bị giả mạo
 
-&#x09;				MQTT Broker (Mosquitto)
+* Gửi dữ liệu không có HMAC.
+* Gửi HMAC sai.
+* Giả mạo Client ID.
+* Replay Attack.
+* Gửi dữ liệu giả.
 
-&#x09;				   |
+### Authentication Server
 
-&#x09;				   |
+* Xác thực Client ID.
+* Kiểm tra Timestamp.
+* Kiểm tra HMAC.
+* Chấp nhận dữ liệu hợp lệ.
+* Từ chối thiết bị giả mạo.
+* Ghi Audit Log.
 
-&#x09;				Server Authenticator
+### Dashboard
 
-&#x20;    					   │
+* Hiển thị dữ liệu cảm biến.
+* Hiển thị trạng thái ACCEPT/REJECT.
+* Theo dõi thiết bị đang hoạt động.
+* Hiển thị cảnh báo khi phát hiện tấn công.
 
-&#x20;  					   ├── Kiểm tra HMAC
+---
 
-&#x20;  					   ├── Kiểm tra Timestamp
+# 🏗 Kiến trúc hệ thống
 
-&#x20;					   ├── Lưu Log
+```text
+                Legitimate Sensor
+                        │
+                        ▼
+                 MQTT Broker
+                        │
+                        ▼
+            Authentication Server
+             (HMAC + Timestamp)
+              │              │
+              ▼              ▼
+       Flask Dashboard   Audit Log
+              ▲
+              │
+       Fake Device (Attacker)
+```
 
-&#x20; 					   └── Dashboard
+---
 
-1.Thiết bị hợp lệ gửi dữ liệu cảm biến đến Server.
+# 🛠 Công nghệ sử dụng
 
-2.Kẻ tấn công sẽ giả mạo Device ID để gửi dữ liệu giả.
+| Công nghệ         | Mục đích               |
+| ----------------- | ---------------------- |
+| Python 3.11       | Ngôn ngữ lập trình     |
+| Flask             | Dashboard              |
+| Docker            | Triển khai MQTT Broker |
+| Docker Compose    | Quản lý container      |
+| Eclipse Mosquitto | MQTT Broker            |
+| Paho MQTT         | MQTT Client            |
+| HMAC-SHA256       | Xác thực dữ liệu       |
+| JSON              | Lưu báo cáo            |
+| Wireshark         | Phân tích gói tin      |
 
-3\. Server xác thực:
+---
 
-&#x09;- Device ID
+# 📂 Cấu trúc thư mục
 
-&#x09;- HMAC
-
-&#x09;- Timestamp
-
-4\. Nếu hợp lệ: ACCEPT
-
-5\. Nếu không hợp lệ: REJECT đồng thời ghi vào Audit Log.
-
-
-
-**# Cấu trúc thư mục**
-
-
-
+```text
 De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT
-
 │
-
 ├── configs/
-
 │   ├── mosquitto.conf
-
-│   └── security\_policy.json
-
+│   └── security_policy.json
 │
-
 ├── data/
-
-│   └── dataset\_sensors.csv
-
+│   └── dataset_sensors.csv
 │
-
-├── references/
-
-│   └── link\_nguon.md
-
-│
-
 ├── report/
-
-│   ├── 231A010500\_LeChiTam\_DeTai28\_TieuLuan\_CuoiKy.docx
-
-│   └── 231A010500\_LeChiTam\_DeTai28\_TieuLuan\_CuoiKy.pdf
-
+│   ├── BaoCao.docx
+│   └── BaoCao.pdf
 │
-
 ├── results/
-
-│   ├── screenshots/
-
-│   ├── access\_audit.log
-
-│   └── evaluation\_report.json
-
+│   ├── access_audit.log
+│   └── evaluation_report.json
 │
-
 ├── src/
-
-│   ├── app\_dashboard.py
-
-│   ├── attacker\_spoof.py
-
-│   ├── generate\_report.py
-
-│   ├── sensor\_legit.py
-
-│   └── server\_authenticator.py
-
+│   ├── sensor_legit.py
+│   ├── attacker_spoof.py
+│   ├── server_authenticator.py
+│   ├── app_dashboard.py
+│   └── generate_report.py
 └── README.md
+```
 
-**# Công nghệ sử dụng**
+---
 
-&#x09;- Python
+# ⚙ Cài đặt
 
-&#x09;- Flask
+Clone dự án
 
-&#x09;- Eclipse Mosquitto MQTT Broker
+```bash
+git clone https://github.com/lechitam1602-dot/De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT.git
+```
 
-&#x09;- Docker
+Di chuyển vào thư mục
 
-&#x09;- Wireshark
+```bash
+cd De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT
+```
 
-**# QUY TRÌNH KIỂM THỬ HỆ THỐNG** 
+Cài đặt thư viện
 
-1\. Khởi chạy Docker Broker
+```bash
+pip install -r requirements.txt
+```
 
-Mở 1 cửa sổ Command Prompt (CMD) và nhập:
+---
 
-cd "C:\\Users\\Dell\\Documents\\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+# ▶ Hướng dẫn sử dụng
 
-docker start mosquitto-broker
+Khởi động MQTT Broker
 
+```bash
+docker compose up -d
+```
 
+Chạy Authentication Server
 
-(Nếu chưa tạo container trước đó, chạy: docker run -d --name mosquitto-broker -p 1883:1883 -v "%cd%/configs/mosquitto.conf:/mosquitto/config/mosquitto.conf" eclipse-mosquitto:2.0.18)
+```bash
+python src/server_authenticator.py
+```
 
-2\. Mở Wireshark bắt gói tin
+Chạy Dashboard
 
-&#x09;a) Mở phần mềm Wireshark.
+```bash
+python src/app_dashboard.py
+```
 
-&#x09;b) Nhấp đôi vào Adapter for loopback traffic capture.
+Truy cập Dashboard
 
-&#x09;c) Tại ô tìm kiếm filter ở trên cùng, gõ mqtt rồi nhấn Enter.
+```
+http://127.0.0.1:5000
+```
 
-3\. Mở 4 cửa sổ CMD chạy các thành phần
+Chạy thiết bị hợp lệ
 
-Hãy chia màn hình hoặc mở 4 cửa sổ CMD riêng biệt:
+```bash
+python src/sensor_legit.py
+```
 
-&#x09;• CMD 1 - Chạy Server Authenticator:
+Chạy thiết bị giả mạo
 
-cd "C:\\Users\\Dell\\Documents\\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```bash
+python src/attacker_spoof.py
+```
 
-python src/server\_authenticator.py
+Sinh báo cáo
 
-(Màn hình hiện: \[\*] Server Authenticator đang hoạt động...)
+```bash
+python src/generate_report.py
+```
 
+---
 
+# 🧪 Kịch bản kiểm thử
 
-&#x09;• CMD 2 - Chạy Flask Web Dashboard:
+| Test Case | Mô tả             | Kết quả mong đợi |
+| --------- | ----------------- | ---------------- |
+| TC-01     | Thiết bị hợp lệ   | ACCEPT           |
+| TC-02     | Thiếu HMAC        | REJECT           |
+| TC-03     | HMAC không hợp lệ | REJECT           |
+| TC-04     | Replay Attack     | REJECT           |
 
-cd "C:\\Users\\Dell\\Documents\\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+---
 
-python src/app\_dashboard.py
+# 📊 Kết quả
 
-(Mở trình duyệt truy cập: (http://127.0.0.1:5000)
+* Hoàn thành môi trường Lab IoT.
+* Triển khai thành công MQTT Broker bằng Docker.
+* Mô phỏng thiết bị hợp lệ và thiết bị giả mạo.
+* Phát hiện hiệu quả Device Spoofing.
+* Ngăn chặn Replay Attack bằng Timestamp.
+* Xác thực dữ liệu bằng HMAC-SHA256.
+* Ghi nhận đầy đủ Audit Log.
+* Dashboard theo dõi trạng thái thiết bị.
+* Sinh báo cáo đánh giá dưới định dạng JSON.
 
+---
 
+# 🚀 Hướng phát triển
 
-&#x09;• CMD 3 - Chạy Cảm biến thật (TC-01):
+* Triển khai trên ESP32 hoặc Raspberry Pi.
+* Áp dụng TLS hoặc Mutual TLS.
+* Quản lý khóa bằng PKI.
+* Tích hợp cơ sở dữ liệu MySQL hoặc PostgreSQL.
+* Kết nối hệ thống SIEM.
+* Tích hợp IDS/IPS.
+* Hỗ trợ nhiều MQTT Broker.
+* Mở rộng Dashboard với biểu đồ thời gian thực.
 
-cd "C:\\Users\\Dell\\Documents\\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+---
 
-python src/sensor\_legit.py
+# 📚 Tài liệu tham khảo
 
-(Quan sát CMD 1 và Web Dashboard xuất hiện dòng log màu xanh \[ACCEPT])
+1. William Stallings, *Cryptography and Network Security: Principles and Practice*, Pearson.
+2. Arshdeep Bahga & Vijay Madisetti, *Internet of Things: A Hands-On Approach*.
+3. Adam Shostack, *Threat Modeling: Designing for Security*.
+4. Eclipse Mosquitto Documentation.
+5. Eclipse Paho MQTT Documentation.
+6. Docker Documentation.
+7. Python Documentation.
+8. OWASP Internet of Things Project.
 
+---
 
+# 👨‍💻 Tác giả
 
-&#x09;• CMD 4 - Chạy Kẻ tấn công giả mạo (TC-02, TC-03, TC-04):
+**Lê Chí Tâm**
 
-cd "C:\\Users\\Dell\\Documents\\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+* **MSSV:** 231A010500
+* **Trường:** Đại học Văn Hiến
+* **Khoa:** Công nghệ Thông tin
+* **Ngành:** An toàn thông tin
 
-python src/attacker\_spoof.py
+---
 
-(Quan sát CMD 1 và Web Dashboard xuất hiện ngay 3 dòng log màu đỏ \[REJECT] do bị chặn)
+<div align="center">
 
-
-
-4\. Sinh Báo cáo Thống kê
-
-Mở thêm 1 CMD (hoặc ở CMD 4 sau khi chạy xong) gõ:
-
-python src/generate\_report.py
-
-&#x20;
-
-
-
+</div>
