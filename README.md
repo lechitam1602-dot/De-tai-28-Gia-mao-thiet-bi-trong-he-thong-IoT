@@ -162,9 +162,7 @@ De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT
 ## Bước 1. Khởi động MQTT Broker
 
 ```bash
-cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
-
-docker start mosquitto-broker
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT" docker start mosquitto-broker
 ```
 
 Nếu chưa tạo container:
