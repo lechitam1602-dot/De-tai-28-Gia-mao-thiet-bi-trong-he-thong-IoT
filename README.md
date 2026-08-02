@@ -170,12 +170,8 @@ docker start mosquitto-broker
 Nếu chưa tạo container:
 
 ```bash
-docker run -d --name mosquitto-broker ^
--p 1883:1883 ^
--v "%cd%/configs/mosquitto.conf:/mosquitto/config/mosquitto.conf" ^
-eclipse-mosquitto:2.0.18
+docker run -d --name mosquitto-broker ^ -p 1883:1883 ^ -v "%cd%/configs/mosquitto.conf:/mosquitto/config/mosquitto.conf" ^ eclipse-mosquitto:2.0.18
 ```
-
 ---
 
 ## Bước 2. Bắt gói tin bằng Wireshark
