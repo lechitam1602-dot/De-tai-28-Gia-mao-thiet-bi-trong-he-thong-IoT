@@ -23,8 +23,8 @@
 
 # 📖 Giới thiệu
 
-Trong các hệ thống Internet of Things (IoT) hiện đại như nhà thông minh (Smart Home), nông nghiệp thông minh và giám sát công nghiệp, các thiết bị đầu cuối (cảm biến, actuator) liên tục thu thập và gửi dữ liệu về trung tâm xử lý qua các giao thức như MQTT, HTTP hoặc CoAP. Tuy nhiên, do hạn chế về tài năng phần cứng và chi phí sản xuất, nhiều thiết bị IoT không được trang bị các cơ chế xác thực nguồn gốc đủ mạnh.
-Tấn công Giả mạo thiết bị (Device Spoofing) xảy ra khi kẻ tấn công đánh cắp hoặc mạo danh các thông số định danh của thiết bị hợp lệ (như địa chỉ MAC, IP, Client ID, hoặc API Key) để gửi dữ liệu giả mạo hoặc thực hiện các lệnh điều khiển trái phép. Hậu quả của dạng tấn công này vô cùng nghiêm trọng, có thể dẫn đến việc sai lệch dữ liệu giám sát, kích hoạt các kịch bản điều khiển sai mục đích hoặc gây mất an toàn cho toàn bộ hạ tầng. Do đó, việc nghiên cứu cơ chế tấn công giả mạo thiết bị IoT, đồng thời xây dựng giải pháp phòng chống và giám sát thời gian thực là vô cùng cần thiết.
+  Trong các hệ thống Internet of Things (IoT) hiện đại như nhà thông minh (Smart Home), nông nghiệp thông minh và giám sát công nghiệp, các thiết bị đầu cuối (cảm biến, actuator) liên tục thu thập và gửi dữ liệu về trung tâm xử lý qua các giao thức như MQTT, HTTP hoặc CoAP. Tuy nhiên, do hạn chế về tài năng phần cứng và chi phí sản xuất, nhiều thiết bị IoT không được trang bị các cơ chế xác thực nguồn gốc đủ mạnh.
+  Tấn công Giả mạo thiết bị (Device Spoofing) xảy ra khi kẻ tấn công đánh cắp hoặc mạo danh các thông số định danh của thiết bị hợp lệ (như địa chỉ MAC, IP, Client ID, hoặc API Key) để gửi dữ liệu giả mạo hoặc thực hiện các lệnh điều khiển trái phép. Hậu quả của dạng tấn công này vô cùng nghiêm trọng, có thể dẫn đến việc sai lệch dữ liệu giám sát, kích hoạt các kịch bản điều khiển sai mục đích hoặc gây mất an toàn cho toàn bộ hạ tầng. Do đó, việc nghiên cứu cơ chế tấn công giả mạo thiết bị IoT, đồng thời xây dựng giải pháp phòng chống và giám sát thời gian thực là vô cùng cần thiết.
 
 Hệ thống áp dụng cơ chế:
 
