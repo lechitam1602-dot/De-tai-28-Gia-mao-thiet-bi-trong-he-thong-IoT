@@ -159,49 +159,279 @@ De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT
 
 # 🚀 Hướng dẫn chạy Demo
 
-## Bước 1. Khởi động MQTT Broker
-
-```bash
-cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT" docker start mosquitto-broker
-```
-
-Nếu chưa tạo container:
-
-```bash
-docker run -d --name mosquitto-broker ^ -p 1883:1883 ^ -v "%cd%/configs/mosquitto.conf:/mosquitto/config/mosquitto.conf" ^ eclipse-mosquitto:2.0.18
-```
 ---
 
-## Bước 2. Bắt gói tin bằng Wireshark
+# 1. Chuẩn bị môi trường
 
-- Mở Wireshark
-- Chọn **Adapter for loopback traffic capture**
-- Filter:
+Máy tính cần cài đặt các phần mềm sau:
 
-```text
+| Phần mềm | Phiên bản khuyến nghị |
+|----------|-----------------------|
+| Python | 3.10 trở lên |
+| Docker Desktop | Mới nhất |
+| Wireshark | Mới nhất |
+| Google Chrome hoặc Edge | Bất kỳ |
+| Visual Studio Code (khuyến nghị) | Mới nhất |
+
+Sau khi cài xong hãy khởi động lại máy tính.
+
+---
+
+# 2. Tải mã nguồn
+
+Clone repository
+
+```bash
+git clone https://github.com/lechitam1602-dot/De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT.git
+```
+
+Hoặc tải file ZIP từ GitHub rồi giải nén.
+
+Sau khi giải nén sẽ có thư mục
+
+```
+De-tai-28-Gia-mao-thiet-bi-trong-he-thong-IoT
+```
+
+---
+
+# 3. Mở Command Prompt
+
+Nhấn
+
+```
+Windows + R
+```
+
+gõ
+
+```
+cmd
+```
+
+rồi nhấn Enter.
+
+---
+
+# 4. Di chuyển tới thư mục dự án
+
+Ví dụ dự án được lưu tại
+
+```
+C:\Users\Dell\Documents\
+```
+
+gõ
+
+```bash
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```
+
+Muốn kiểm tra đã vào đúng thư mục chưa
+
+```bash
+dir
+```
+
+Nếu thấy các thư mục
+
+```
+configs
+src
+results
+README.md
+```
+
+thì là đúng.
+
+---
+
+# 5. Cài đặt thư viện Python
+
+
+Trong CMD nhập
+
+```bash
+pip install flask
+```
+
+Tiếp tục
+
+```bash
+pip install paho-mqtt
+```
+
+Nếu dùng Python Launcher
+
+```bash
+py -m pip install flask
+py -m pip install paho-mqtt
+```
+
+Kiểm tra Python
+
+```bash
+python --version
+```
+
+Ví dụ
+
+```
+Python 3.12.2
+```
+
+---
+
+# 6. Kiểm tra Docker
+
+Mở Docker Desktop.
+
+Đợi đến khi xuất hiện
+
+```
+Docker Desktop is running
+```
+
+Kiểm tra bằng CMD
+
+```bash
+docker --version
+```
+
+Ví dụ
+
+```
+Docker version 28.x
+```
+
+---
+
+# 7. Tạo MQTT Broker (chỉ lần đầu)
+
+Nếu chưa từng tạo Broker hãy chạy
+
+```bash
+docker run -d ^ --name mosquitto-broker ^ -p 1883:1883 ^ -v "%cd%/configs/mosquitto.conf:/mosquitto/config/mosquitto.conf" ^ eclipse-mosquitto:2.0.18
+```
+
+Đợi vài giây.
+
+Kiểm tra
+
+```bash
+docker ps
+```
+
+Nếu thấy
+
+```
+mosquitto-broker
+```
+
+là thành công.
+
+---
+
+# 8. Khởi động MQTT Broker
+
+Nếu Broker đã tạo từ trước thì chỉ cần
+
+```bash
+docker start mosquitto-broker
+```
+
+Kiểm tra
+
+```bash
+docker ps
+```
+
+Phải thấy
+
+```
+STATUS Up
+```
+
+---
+
+# 9. Mở Wireshark
+
+Mở Wireshark.
+
+Chọn
+
+```
+Adapter for loopback traffic capture
+```
+
+hoặc
+
+```
+Npcap Loopback Adapter
+```
+
+Nhấp đôi để bắt gói tin.
+
+Tại ô Filter nhập
+
+```
 mqtt
 ```
 
+rồi nhấn Enter.
+
+Giữ nguyên cửa sổ Wireshark.
+
 ---
 
-## Bước 3. Chạy Server Authenticator
+# 10. Mở 4 cửa sổ CMD
+
+Mở tổng cộng **4 cửa sổ Command Prompt**.
+
+---
+
+# CMD số 1
+
+Di chuyển tới thư mục dự án
+
+```bash
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```
+
+Chạy
 
 ```bash
 python src/server_authenticator.py
 ```
 
-Kết quả
+Nếu thành công sẽ thấy
 
 ```
 [*] Server Authenticator đang hoạt động...
 ```
 
+Không đóng cửa sổ này.
+
 ---
 
-## Bước 4. Chạy Dashboard
+# CMD số 2
+
+Di chuyển tới thư mục dự án
+
+```bash
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```
+
+Chạy
 
 ```bash
 python src/app_dashboard.py
+```
+
+Màn hình hiện
+
+```
+Running on http://127.0.0.1:5000
 ```
 
 Mở trình duyệt
@@ -210,9 +440,19 @@ Mở trình duyệt
 http://127.0.0.1:5000
 ```
 
+Giữ nguyên Dashboard.
+
 ---
 
-## Bước 5. Chạy cảm biến hợp lệ (TC-01)
+# CMD số 3
+
+Di chuyển tới thư mục dự án
+
+```bash
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```
+
+Chạy
 
 ```bash
 python src/sensor_legit.py
@@ -220,45 +460,207 @@ python src/sensor_legit.py
 
 Kết quả mong đợi
 
+Server hiển thị
+
 ```
-[ACCEPT]
+ACCEPT
 ```
 
-Log hiển thị màu xanh.
+Dashboard xuất hiện dòng log màu xanh.
+
+Wireshark xuất hiện các gói MQTT.
 
 ---
 
-## Bước 6. Chạy chương trình giả mạo (TC-02, TC-03, TC-04)
+# CMD số 4
+
+Di chuyển tới thư mục dự án
+
+```bash
+cd "C:\Users\Dell\Documents\Đề tài 28 – Giả mạo thiết bị trong hệ thống IoT"
+```
+
+Chạy
 
 ```bash
 python src/attacker_spoof.py
 ```
 
-Kết quả mong đợi
+Kết quả
+
+Server sẽ hiện
 
 ```
-[REJECT]
-[REJECT]
-[REJECT]
+REJECT
+REJECT
+REJECT
 ```
 
-Log hiển thị màu đỏ.
+Dashboard hiển thị log màu đỏ.
+
+Audit Log được ghi lại.
 
 ---
 
-## Bước 7. Sinh báo cáo
+# 11. Sinh báo cáo
+
+Mở CMD mới hoặc dùng lại CMD số 4.
+
+Nhập
 
 ```bash
 python src/generate_report.py
 ```
 
-Sinh file:
+Sau khi hoàn thành sẽ sinh file
 
 ```
-evaluation_report.json
+results/evaluation_report.json
 ```
 
 ---
+
+# 12. Kiểm tra kết quả
+
+Mở thư mục
+
+```
+results
+```
+
+Kiểm tra các file
+
+```
+access_audit.log
+
+evaluation_report.json
+
+screenshots/
+```
+
+Nếu các file được tạo thành công nghĩa là hệ thống hoạt động đúng.
+
+---
+
+# Kết quả mong đợi
+
+| Thành phần | Kết quả |
+|------------|----------|
+| MQTT Broker | Đang chạy |
+| Dashboard | Truy cập được |
+| Sensor hợp lệ | ACCEPT |
+| Thiết bị giả mạo | REJECT |
+| Audit Log | Được ghi |
+| evaluation_report.json | Được tạo |
+| Wireshark | Hiển thị gói MQTT |
+
+---
+
+# Dừng hệ thống
+
+Đóng tất cả cửa sổ CMD.
+
+Dừng Docker
+
+```bash
+docker stop mosquitto-broker
+```
+
+Nếu muốn xóa Broker
+
+```bash
+docker rm mosquitto-broker
+```
+
+---
+
+# Một số lỗi thường gặp
+
+## Lỗi
+
+```
+python is not recognized
+```
+
+**Cách khắc phục**
+
+Cài đặt Python và tích chọn **Add Python to PATH**.
+
+---
+
+## Lỗi
+
+```
+docker is not recognized
+```
+
+**Cách khắc phục**
+
+Cài Docker Desktop và khởi động lại máy.
+
+---
+
+## Lỗi
+
+```
+Connection Refused
+```
+
+**Nguyên nhân**
+
+Broker MQTT chưa chạy.
+
+**Khắc phục**
+
+```bash
+docker start mosquitto-broker
+```
+
+---
+
+## Lỗi
+
+```
+No module named flask
+```
+
+**Khắc phục**
+
+```bash
+pip install flask
+```
+
+---
+
+## Lỗi
+
+```
+No module named paho
+```
+
+**Khắc phục**
+
+```bash
+pip install paho-mqtt
+```
+
+---
+
+## Lỗi Dashboard không mở được
+
+Kiểm tra chương trình
+
+```
+app_dashboard.py
+```
+
+đã chạy hay chưa.
+
+Sau đó truy cập lại
+
+```
+http://127.0.0.1:5000
+```
 
 # 📊 Kết quả mong đợi
 
